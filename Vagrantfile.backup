@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "fedora21"
+
+  # Get the missing packages
+  config.vm.provision :shell, path: 'vagrant.sh'
+
+  config.vm.synced_folder ".", "/home/vagrant", type: "nfs"
+
+  # Run production server
+  config.vm.provision :shell, inline: <<SHELL
+sudo gem install passenger
+sudo /usr/local/bin/passenger start --daemonize --port 3001 --user vagrant --environment production
+SHELL
+
+  # Rails development
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
+
+  # Rails production
+  config.vm.network "forwarded_port", guest: 3001, host: 3001
+
+  config.ssh.insert_key = false
+  config.ssh.forward_agent = true
+end
