@@ -31,9 +31,7 @@ SHELL
   end
 
   config.vm.define "db" do |db|
-    # We need a static public IP
     db.vm.network "private_network", ip: "192.168.142.101", :libvirt__network_name => "demo"
-    #db.vm.network :public_network, :dev => "em1", :mode => 'bridge'
 
     # Install and configure production database
     db.vm.provision :shell, inline: <<SHELL
