@@ -1,3 +1,5 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -26,8 +28,8 @@ sudo /usr/local/bin/passenger start --daemonize --port 3001 --user vagrant --env
 SHELL
 
     # Forward ports for development and production ENV
-    web.vm.network "forwarded_port", guest: 3000, host: 3000
-    web.vm.network "forwarded_port", guest: 3001, host: 3001
+    web.vm.network "forwarded_port", guest: 3000, host: 3000, auto_correct: true # , protocol: "udp"
+    web.vm.network "forwarded_port", guest: 3001, host: 3001, auto_correct: true
   end
 
   config.vm.define "db" do |db|
